@@ -1112,16 +1112,9 @@ def main():
         output_config_file = os.path.join(args.output_dir, CONFIG_NAME)
 
         torch.save(model_to_save.state_dict(), output_model_file)
-        model_to_save.config.to_json_file(output_config_file)
-        tokenizer.save_vocabulary(args.output_dir)
+        with open(output_config_file, 'w') as f:
+            f.write(model_to_save.config.to_json_string())
 
-        # Load a trained model and vocabulary that you have fine-tuned
-        model = BertForQuestionAnswering.from_pretrained(args.output_dir)
-        tokenizer = BertTokenizer.from_pretrained(args.output_dir, do_lower_case=args.do_lower_case)
-    else:
-        model = BertForQuestionAnswering.from_pretrained(args.bert_model)
-
-    model.to(device)
 
 
 
